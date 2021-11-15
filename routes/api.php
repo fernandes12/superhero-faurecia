@@ -30,6 +30,7 @@ Route::get("edit/{id}", [SuperheroController::class, 'edit'])->name('api.edit');
 Route::post("edit", [SuperheroController::class, 'update'])->name('api.update');
 Route::get("delete/{id}", [SuperheroController::class, 'destroy'])->name('api.delete');
 Route::get("find", [SuperheroController::class, 'find'])->name('api.find');
+Route::get("find_hero/{name}", [SuperheroController::class, 'find_hero'])->name('api.find_hero');
 
 //Abilities
 Route::get("abilities", [AbilityController::class, 'index'])->name('api.abilities');

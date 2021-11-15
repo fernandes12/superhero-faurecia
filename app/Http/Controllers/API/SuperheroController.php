@@ -229,6 +229,34 @@ class SuperheroController extends Controller
         
     }
 
+    public function find_hero($name)
+    {
+        
+        $found_hero = Superhero::where('hero_name','like','%'.$name.'%')->orWhere('real_name','like','%'.$name.'%')->first();
+
+        if ($found_hero) {
+            $superhero = DB::table('superheroes')->where('id', $found_hero->id)->first();
+
+                $hero_abilities = DB::table('ability_superheroes')
+                    ->join('superheroes', 'ability_superheroes.superhero_id', '=', 'superheroes.id')
+                    ->join('abilities', 'abilities.id', '=', 'ability_superheroes.ability_id')
+                    ->select('abilities.*')
+                    ->where('superheroes.id', '=', $superhero->id)
+                    ->get();
+                
+                $hero_teams = DB::table('team_superheroes')
+                    ->join('superheroes', 'team_superheroes.superhero_id', '=', 'superheroes.id')
+                    ->join('teams', 'teams.id', '=', 'team_superheroes.team_id')
+                    ->select('teams.*')
+                    ->where('superheroes.id', '=', $superhero->id)
+                    ->get();
+
+                    return view('view', compact('superhero', 'hero_abilities', 'hero_teams'));
+        } else {
+            return redirect()->route('api.home')->with('error','Could not find superhero with such name!');
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
